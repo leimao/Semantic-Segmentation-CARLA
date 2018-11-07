@@ -16,7 +16,7 @@ To start CARLA in a window with customized resolution.
 ```bash
 $ ./CarlaUE4.sh -windowed -ResX=512 -ResY=512
 ```
-
+The resolution settings and window settings only affects the display on the screen. It does not affect the internal resolution in the game environment.
 
 
 * ``ALT+F4`` terminates environment.
@@ -41,3 +41,36 @@ To initialize the environment with customized variable values:
 ```bash
 $ ./CarlaUE4.sh -carla-settings=Example.CarlaSettings.ini
 ```
+
+
+### Collect Data
+
+
+First start the Carla python control script.
+
+```bash
+python3 client_semantic_segmentation.py --autopilot --images-to-disk
+```
+
+Need ``autopilot`` to make sure the car runs well.
+
+```bash
+./CarlaUE4.sh -windowed -ResX=513 -ResY=513 -carla-server
+```
+
+Then start the Carla environment and make sure that it is in the ``carla-server`` mode.
+
+
+```bash
+python3 client_semantic_segmentation.py --autopilot --images-to-disk --images-to-disk-frequency 5 --weather-id 0
+```
+
+
+```bash
+python3 client_semantic_segmentation.py --autopilot --images-to-disk --images-to-disk-frequency 5 --weather-id 0 --quality-level Low
+```
+
+```bash
+./CarlaUE4.sh -windowed -ResX=513 -ResY=513 -carla-server -carla-settings=semantic_segmentation.ini
+```
+
