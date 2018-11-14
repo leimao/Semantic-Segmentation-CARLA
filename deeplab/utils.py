@@ -182,7 +182,9 @@ def read_label(label_filename):
         label = mat['GTcls']['Segmentation'][0][0]
     else:
         # Magic function to read VOC2012 semantic labelshttps://github.com/tensorflow/models/blob/master/research/deeplab/datasets/remove_gt_colormap.py#L42
-        label = np.asarray(Image.open(label_filename))
+        # label = np.asarray(Image.open(label_filename))
+        # This reading function is specificially for CARLA dataset
+        label = cv2.imread(label_filename)[:,:,2]
 
     return label
 
