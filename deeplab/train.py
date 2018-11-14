@@ -14,7 +14,7 @@ from utils import (DataPreprocessor, Dataset, Iterator,
                    validation_single_demo)
 
 
-def train(network_backbone, pre_trained_model=None, trainset_filename='./dataset/carla_trainset.txt', validset_filename='./dataset/carla_validset.txt', dataset_directory='/home/leimao/workspace/CARLA_Semantic_Segmentation/CARLA_dataset', model_dir=None, log_dir='data/logs/deeplab/'):
+def train(network_backbone, pre_trained_model=None, trainset_filename='./dataset/carla_trainset.txt', validset_filename='./dataset/carla_validset.txt', dataset_directory='/home/leimao/workspace/CARLA_Semantic_Segmentation/CARLA_dataset', model_dir=None, log_dir='./logs/deeplab/'):
 
     if not model_dir:
         model_dir = './models/deeplab/{}_carla/'.format(network_backbone)
@@ -46,8 +46,8 @@ def train(network_backbone, pre_trained_model=None, trainset_filename='./dataset
     carla_preprocessor = DataPreprocessor(channel_means=channel_means, output_size=image_shape, min_scale_factor=0.5, max_scale_factor=2.0)
 
     # Prepare dataset iterators
-    train_iterator = Iterator(dataset=train_dataset, minibatch_size=minibatch_size, process_func=voc2012_preprocessor.preprocess, random_seed=random_seed, scramble=True, num_jobs=1)
-    valid_iterator = Iterator(dataset=valid_dataset, minibatch_size=minibatch_size, process_func=voc2012_preprocessor.preprocess, random_seed=None, scramble=False, num_jobs=1)
+    train_iterator = Iterator(dataset=train_dataset, minibatch_size=minibatch_size, process_func=carla_preprocessor.preprocess, random_seed=random_seed, scramble=True, num_jobs=1)
+    valid_iterator = Iterator(dataset=valid_dataset, minibatch_size=minibatch_size, process_func=carla_preprocessor.preprocess, random_seed=None, scramble=False, num_jobs=1)
 
     model = DeepLab(network_backbone, num_classes=num_classes, ignore_label=ignore_label, batch_norm_momentum=batch_norm_decay, pre_trained_model=pre_trained_model, log_dir=log_dir)
 
@@ -128,9 +128,9 @@ if __name__ == '__main__':
     pre_trained_model_default = './models/pretrained/resnet_101/resnet_v2_101.ckpt'
     trainset_filename_default = './dataset/carla_trainset.txt'
     validset_filename_default = './dataset/carla_validset.txt'
-    dataset_directory_default = '/home/leimao/workspace/CARLA_Semantic_Segmentation/CARLA_dataset'
+    dataset_directory_default = '/workspace/CARLA_Semantic_Segmentation/CARLA_dataset'
     model_dir_default = './models/deeplab/{}_carla/'.format(network_backbone_default)
-    log_dir_default = 'data/logs/deeplab/'
+    log_dir_default = './logs/deeplab/'
     random_seed_default = 0
 
     parser.add_argument('--network_backbone', type=str, help='Network backbones: resnet_50, resnet_101, mobilenet_1.0_224. Default: resnet_101', default=network_backbone_default)
@@ -156,4 +156,4 @@ if __name__ == '__main__':
     tf.set_random_seed(random_seed)
     np.random.seed(random_seed)
 
-    train(network_backbone=network_backbone, pre_trained_model=pre_trained_model, trainset_filename=trainset_filename, validset_filename=validset_filename, images_dir=images_dir, labels_dir=labels_dir, trainset_augmented_filename=trainset_augmented_filename, images_augmented_dir=images_augmented_dir, labels_augmented_dir=labels_augmented_dir, model_dir=model_dir, log_dir=log_dir)
+    train(network_backbone=network_backbone, pre_trained_model=pre_trained_model, trainset_filename=trainset_filename, validset_filename=validset_filename, dataset_directory=dataset_directory, model_dir=model_dir, log_dir=log_dir)

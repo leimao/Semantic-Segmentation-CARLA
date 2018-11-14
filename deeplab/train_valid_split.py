@@ -67,7 +67,7 @@ def main():
     num_weathers = 15
     num_episodes = 50
     start_episode = num_weathers
-    carla_dataset_directory = '/home/marine/Workspace/CARLA_dataset'
+    carla_dataset_directory = '/workspace/CARLA_Semantic_Segmentation/CARLA_dataset'
     dataset_index_directory = './dataset'
     trainset_filename = 'carla_trainset.txt'
     validset_filename='carla_validset.txt'

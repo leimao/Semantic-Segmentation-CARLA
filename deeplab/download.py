@@ -120,7 +120,6 @@ if __name__ == '__main__':
     pretrained_models_default = ['resnet_50', 'resnet_101', 'mobilenet_1.0_224']
 
     parser.add_argument('--downloads_dir', type=str, help='Downloads directory', default=downloads_dir_default)
-    parser.add_argument('--data_dir', type=str, help='Data directory', default=data_dir_default)
     parser.add_argument('--pretrained_models_dir', type=str, help='Pretrained models directory', default=pretrained_models_dir_default)
     parser.add_argument('--pretrained_models', type=str, nargs='+', help='Pretrained models to download: resnet_50, resnet_101, mobilenet_1.0_224', default=pretrained_models_default)
     parser.add_argument('--force', help='force downloading and extracting files that are already present', default=False, action='store_true')
@@ -128,7 +127,6 @@ if __name__ == '__main__':
     argv = parser.parse_args()
 
     downloads_dir = argv.downloads_dir
-    data_dir = argv.data_dir
     pretrained_models_dir = argv.pretrained_models_dir
     pretrained_models = argv.pretrained_models
     force = argv.force
