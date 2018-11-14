@@ -63,11 +63,10 @@ class RandomStateStack:
 
 class Dataset(object):
 
-    def __init__(self, dataset_filename, images_dir, labels_dir, image_extension='.jpg', label_extension='.png'):
+    def __init__(self, dataset_filename, dataset_directory, image_extension='.png', label_extension='.png'):
 
         self.dataset_filename = dataset_filename
-        self.images_dir = images_dir
-        self.labels_dir = labels_dir
+        self.dataset_directory = dataset_directory
         self.image_extension = image_extension
         self.label_extension = label_extension
         self.image_filenames, self.label_filenames = self.read_dataset()
@@ -80,9 +79,11 @@ class Dataset(object):
 
         with open(self.dataset_filename, 'r') as file:
             for line in file:
-                filename = line.strip()
-                image_filename = os.path.join(self.images_dir, filename + self.image_extension)
-                label_filename = os.path.join(self.labels_dir, filename + self.label_extension)
+                paths = line.strip().split(',')
+                image_path = paths[0]
+                label_path = paths[1]
+                image_filename = os.path.join(self.dataset_directory, image_path)
+                label_filename = os.path.join(self.dataset_directory, label_path)
                 image_filenames.append(image_filename)
                 label_filenames.append(label_filename)
 
