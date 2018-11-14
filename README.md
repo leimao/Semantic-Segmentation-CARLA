@@ -74,3 +74,12 @@ python3 client_semantic_segmentation.py --autopilot --images-to-disk --images-to
 ./CarlaUE4.sh -windowed -ResX=513 -ResY=513 -carla-server -carla-settings=semantic_segmentation.ini
 ```
 
+```bash
+python3 client_semantic_segmentation.py --autopilot --images-to-disk --images-to-disk-frequency 1 --quality-level Epic --number-of-episodes 50 --frames-per-episode 1000
+```
+
+```bash
+./CarlaUE4.sh -windowed -ResX=513 -ResY=513 -carla-server -carla-settings=semantic_segmentation.ini
+```
+
+
