@@ -21,9 +21,9 @@ def train(network_backbone, pre_trained_model=None, trainset_filename='./dataset
     num_classes = 12
     ignore_label = 0
     num_epochs = 1000
-    minibatch_size = 8  # Unable to do minibatch_size = 12 :(
+    minibatch_size = 4  # Unable to do minibatch_size = 12 :(
     random_seed = 0
-    learning_rate = 1e-5
+    learning_rate = 1e-6
     weight_decay = 5e-4
     batch_norm_decay = 0.99
     image_shape = [513, 513]
