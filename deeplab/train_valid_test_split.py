@@ -61,6 +61,30 @@ def train_valid_split(directory, episode_foldernames, trainset_filename, validse
             fhand.write('{},{}\n'.format(image_path, label_path))
 
 
+def prepare_test(directory, episode_foldernames, testset_filename):
+
+    testset_images = list()
+    testset_labels = list()
+
+    for episode_foldername in episode_foldernames:
+        episode_dir = os.path.join(directory, episode_foldername, 'CameraRGB')
+        episode_filenames = list()
+        for filename in os.listdir(episode_dir):
+            filename_raw = os.path.splitext(filename)[0]
+            episode_filenames.append(filename_raw)
+        episode_filenames.sort()
+
+        testset = episode_filenames
+
+        testset_images += [os.path.join(episode_foldername, 'CameraRGB', filename + '.png') for filename in testset]
+        testset_labels += [os.path.join(episode_foldername, 'CameraSemanticSegmentation', filename + '.png') for filename in testset]
+
+    with open(testset_filename, 'w+') as fhand:
+        for image_path, label_path in zip(testset_images, testset_labels):
+            fhand.write('{},{}\n'.format(image_path, label_path))
+
+
+
 def main():
 
     # https://carla.readthedocs.io/en/stable/carla_settings/
@@ -70,7 +94,8 @@ def main():
     carla_dataset_directory = '/workspace/CARLA_Semantic_Segmentation/CARLA_dataset'
     dataset_index_directory = './dataset'
     trainset_filename = 'carla_trainset.txt'
-    validset_filename='carla_validset.txt'
+    validset_filename = 'carla_validset.txt'
+    testset_filename = 'carla_testset.txt'
     if not os.path.exists(dataset_index_directory):
         os.makedirs(dataset_index_directory)
     # episode_0000 to episode_0014 were reserved for test
@@ -78,6 +103,8 @@ def main():
     test_episodes = ['episode_{:0>4d}'.format(i) for i in range(start_episode)]
 
     train_valid_split(directory=carla_dataset_directory, episode_foldernames=trainvalid_episodes, trainset_filename=os.path.join(dataset_index_directory, trainset_filename), validset_filename=os.path.join(dataset_index_directory, validset_filename), train_valid_ratio=0.9, random_seed=0)
+
+    prepare_test(directory=carla_dataset_directory, episode_foldernames=test_episodes, testset_filename=os.path.join(dataset_index_directory, testset_filename))
 
 if __name__ == '__main__':
     
