@@ -18,8 +18,8 @@ def train(network_backbone, pre_trained_model=None, trainset_filename='./dataset
 
     if not model_dir:
         model_dir = './models/deeplab/{}_carla/'.format(network_backbone)
-    num_classes = 12
-    ignore_label = 0
+    num_classes = 13
+    ignore_label = 255
     num_epochs = 1000
     minibatch_size = 4  # Unable to do minibatch_size = 12 :(
     random_seed = 0
