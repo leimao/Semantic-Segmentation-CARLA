@@ -98,7 +98,6 @@ def download_pretrained_models(models, downloads_dir='./downloads/', model_dir='
     ResNet-50: [224, 224, 3]
     ResNet-101: [513, 513, 3]
     '''
-
     urls = {
         'resnet_50': 'http://download.tensorflow.org/models/resnet_v2_50_2017_04_14.tar.gz',
         'resnet_101': 'http://download.tensorflow.org/models/resnet_v2_101_2017_04_14.tar.gz',
@@ -110,16 +109,31 @@ def download_pretrained_models(models, downloads_dir='./downloads/', model_dir='
         filepath = download(urls[model], downloads_dir, force=force)
         extract(filepath, 'tar', os.path.join(model_dir, model), force=force)
 
+def download_cityscapes(downloads_dir='./downloads/cityscapes/', data_dir='./data/cityscapes/', force=False):
+    '''
+    Does basically the same thing as following bash commands:
+    curl -c cs_cookies -d "username=StArchon&password=eUpMJjMW4mbEUjZ&submit=Login" https://www.cityscapes-dataset.com/login/
+    curl -b cs_cookies -JLO https://www.cityscapes-dataset.com/file-handling/?packageID=1
+    '''
+    urls = ['https://www.cityscapes-dataset.com/file-handling/?packageID={}'.format(id) for id in [1, 2, 3, 4, 10, 11]]
+    login_dict = {'url': 'https://www.cityscapes-dataset.com/login/', 'payload': {'username': 'StArchon', 'password': 'eUpMJjMW4mbEUjZ', 'submit': 'Login'}}
+
+    filepaths = download(urls, downloads_dir, login_dict=login_dict, force=force)
+    for filepath in filepaths:
+        extract(filepath, 'zip', data_dir, force=force)
+
 
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='Download DeepLab pretrained backbone models.')
 
     downloads_dir_default = './downloads/'
+    data_dir_default = '/workspace/CARLA_Semantic_Segmentation/'
     pretrained_models_dir_default = './models/pretrained/'
     pretrained_models_default = ['resnet_50', 'resnet_101', 'mobilenet_1.0_224']
 
     parser.add_argument('--downloads_dir', type=str, help='Downloads directory', default=downloads_dir_default)
+    parser.add_argument('--data_dir', type=str, help='Data directory', default=data_dir_default)
     parser.add_argument('--pretrained_models_dir', type=str, help='Pretrained models directory', default=pretrained_models_dir_default)
     parser.add_argument('--pretrained_models', type=str, nargs='+', help='Pretrained models to download: resnet_50, resnet_101, mobilenet_1.0_224', default=pretrained_models_default)
     parser.add_argument('--force', help='force downloading and extracting files that are already present', default=False, action='store_true')
@@ -127,9 +141,12 @@ if __name__ == '__main__':
     argv = parser.parse_args()
 
     downloads_dir = argv.downloads_dir
+    data_dir = argv.data_dir
     pretrained_models_dir = argv.pretrained_models_dir
     pretrained_models = argv.pretrained_models
     force = argv.force
 
     print('Downloading pre-trained models...')
     download_pretrained_models(models=pretrained_models, downloads_dir=downloads_dir, model_dir=pretrained_models_dir, force=force)
+    print('Downloading Cityscapes dataset...')
+    download_cityscapes(downloads_dir=os.path.join(downloads_dir, 'cityscapes'), data_dir=os.path.join(data_dir, 'cityscapes'), force=force)
