@@ -1,4 +1,3 @@
-
 import os
 import cv2
 import numpy as np
@@ -6,8 +5,6 @@ import numpy as np
 from model import DeepLab
 from tqdm import trange
 from utils import (Dataset, Iterator, save_load_means, subtract_channel_means)
-
-
 
 def labels_to_cityscapes_palette(labels):
     """
@@ -48,7 +45,7 @@ if __name__ == '__main__':
     num_classes = 13
     ignore_label = 255
 
-    test_episodes = ['episode_{:0>4d}'.format(i) for i in range(1)]
+    test_episodes = ['episode_{:0>4d}'.format(i) for i in range(15)]
 
     channel_means = save_load_means(means_filename='channel_means.npz', image_filenames=None)
 
