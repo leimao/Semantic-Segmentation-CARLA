@@ -115,7 +115,8 @@ def download_cityscapes(downloads_dir='./downloads/cityscapes/', data_dir='./dat
     curl -c cs_cookies -d "username=StArchon&password=eUpMJjMW4mbEUjZ&submit=Login" https://www.cityscapes-dataset.com/login/
     curl -b cs_cookies -JLO https://www.cityscapes-dataset.com/file-handling/?packageID=1
     '''
-    urls = ['https://www.cityscapes-dataset.com/file-handling/?packageID={}'.format(id) for id in [1, 2, 3, 4, 10, 11]]
+    #urls = ['https://www.cityscapes-dataset.com/file-handling/?packageID={}'.format(id) for id in [1, 2, 3, 4, 10, 11]]
+    urls = ['https://www.cityscapes-dataset.com/file-handling/?packageID={}'.format(id) for id in [12]]
     login_dict = {'url': 'https://www.cityscapes-dataset.com/login/', 'payload': {'username': 'StArchon', 'password': 'eUpMJjMW4mbEUjZ', 'submit': 'Login'}}
 
     filepaths = download(urls, downloads_dir, login_dict=login_dict, force=force)
@@ -147,6 +148,6 @@ if __name__ == '__main__':
     force = argv.force
 
     print('Downloading pre-trained models...')
-    download_pretrained_models(models=pretrained_models, downloads_dir=downloads_dir, model_dir=pretrained_models_dir, force=force)
+    #download_pretrained_models(models=pretrained_models, downloads_dir=downloads_dir, model_dir=pretrained_models_dir, force=force)
     print('Downloading Cityscapes dataset...')
     download_cityscapes(downloads_dir=os.path.join(downloads_dir, 'cityscapes'), data_dir=os.path.join(data_dir, 'cityscapes'), force=force)

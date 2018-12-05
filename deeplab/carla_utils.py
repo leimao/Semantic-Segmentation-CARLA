@@ -5,7 +5,6 @@ import os
 import cv2
 import numpy as np
 
-from model import DeepLab
 from tqdm import trange
 from utils import (Dataset, Iterator, save_load_means, subtract_channel_means, multiscale_single_test)
 

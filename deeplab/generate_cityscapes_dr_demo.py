@@ -1,5 +1,5 @@
 '''
-Generate labels for CARLA testsets
+Generate labels for Cityscapes demo testsets using CARLA trained models.
 '''
 import os
 from model import DeepLab
@@ -10,12 +10,13 @@ def generate_CARLA_test_demos():
 
     models_dir = './models/deeplab/resnet_101_carla'
     model_filename = 'resnet_101_0.6427.ckpt'
-    dataset_directory = '/workspace/CARLA_Semantic_Segmentation/CARLA_dataset'
+    dataset_directory = '/workspace/CARLA_Semantic_Segmentation/cityscapes/leftImg8bit/demoVideo/'
+    predicted_labels_direcotry = '/workspace/CARLA_Semantic_Segmentation/cityscapes/predictions/'
     test_scales = [1]
     num_classes = 13
     ignore_label = 255
 
-    test_episodes = ['episode_{:0>4d}'.format(i) for i in range(15)]
+    test_episodes = ['stuttgart_00', 'stuttgart_01', 'stuttgart_02']
 
     channel_means = save_load_means(means_filename='channel_means.npz', image_filenames=None)
 
@@ -24,9 +25,9 @@ def generate_CARLA_test_demos():
 
     for test_episode in test_episodes:
         print('Generating semantic segmentation labels for {}'.format(test_episode))
-        image_dir = os.path.join(dataset_directory, test_episode, 'CameraRGB')
-        labels_dir = os.path.join(dataset_directory, test_episode, 'PredictedSemanticSegmentation')
-        visualization_dir = os.path.join(dataset_directory, test_episode, 'VisualizedSemanticSegmentation')
+        image_dir = os.path.join(dataset_directory, test_episode)
+        labels_dir = os.path.join(predicted_labels_direcotry, test_episode, 'PredictedSemanticSegmentation')
+        visualization_dir = os.path.join(predicted_labels_direcotry, test_episode, 'VisualizedSemanticSegmentation')
         print('Generating labels ...')
         generate_labels(image_dir=image_dir, labels_dir=labels_dir, model=model, channel_means=channel_means, test_scales=test_scales, image_format='png')
         print('Generating label visualizations ...')
