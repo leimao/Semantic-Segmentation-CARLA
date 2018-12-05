@@ -1,10 +1,13 @@
+'''
+Generate labeling for CARLA testset (episode 0-14)
+'''
 import os
 import cv2
 import numpy as np
 
 from model import DeepLab
 from tqdm import trange
-from utils import (Dataset, Iterator, save_load_means, subtract_channel_means)
+from utils import (Dataset, Iterator, save_load_means, subtract_channel_means, multiscale_single_test)
 
 def labels_to_cityscapes_palette(labels):
     """
@@ -38,9 +41,7 @@ if __name__ == '__main__':
 
     models_dir = './models/deeplab/resnet_101_carla'
     model_filename = 'resnet_101_0.6427.ckpt'
-    testset_filename = './dataset/carla_testset.txt'
     dataset_directory = '/workspace/CARLA_Semantic_Segmentation/CARLA_dataset'
-    minibatch_size = 16
     test_scales = [1]
     num_classes = 13
     ignore_label = 255
@@ -70,7 +71,8 @@ if __name__ == '__main__':
             predictions_path = os.path.join(predictions_dir, episode_filenames[i] + '.png')
             image = cv2.imread(image_path)
             image_input = subtract_channel_means(image=image, channel_means=channel_means)
-            output = model.test(inputs=[image_input], target_height=image.shape[0], target_width=image.shape[1])[0]
+            # output = model.test(inputs=[image_input], target_height=image.shape[0], target_width=image.shape[1])[0]
+            output = multiscale_single_test(image=image_input, input_scales=test_scales, predictor=model.test)
             predictions = labels_to_cityscapes_palette(labels=np.argmax(output, axis=-1))
             cv2.imwrite(predictions_path, predictions)
 
