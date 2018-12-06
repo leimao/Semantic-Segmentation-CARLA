@@ -84,3 +84,43 @@ def generate_labels_visualization(labels_dir, visualization_dir):
         cv2.imwrite(labels_visualization_filepath, labels_visualization)
 
 
+def blend_images(image_1, image_2, mask, ratio):
+    
+    blend = mask * (image_1 * ratio + image_2 * (1 - ratio)) + (1 - mask) * image_2
+
+    return blend
+
+def blend_image_labels(image_dir, visualization_dir, blend_dir, image_format='png', mask=None):
+
+    if not os.path.exists(blend_dir):
+        os.makedirs(blend_dir)
+    if mask is None:
+        mask = 1
+
+    image_filenames = [filename for filename in os.listdir(image_dir) if os.path.isfile(os.path.join(image_dir, filename)) and os.path.splitext(filename)[1] == '.{}'.format(image_format)]
+    labels_png_filenames = [filename for filename in os.listdir(visualization_dir) if os.path.isfile(os.path.join(visualization_dir, filename)) and os.path.splitext(filename)[1] == '.png']
+
+    for i in trange(len(image_filenames)):
+        image_filename = image_filenames[i]
+        image_filepath = os.path.join(image_dir, image_filename)
+        image_filename_raw = os.path.splitext(image_filename)[0]
+        image_filename_extension = os.path.splitext(image_filename)[1]
+        labels_png_filename = '{}.png'.format(image_filename_raw)
+        assert labels_png_filename in labels_png_filenames, 'Image labels was not found!'
+        labels_png_filepath = os.path.join(visualization_dir, labels_png_filename)
+        blend_filename = '{}.png'.format(image_filename_raw)
+        blend_filepath = os.path.join(blend_dir, blend_filename)
+
+        image = cv2.imread(image_filepath)
+        labels_visualization = cv2.imread(labels_png_filepath)
+        blend = blend_images(image_1=labels_visualization, image_2=image, mask=1, ratio=0.7)
+        cv2.imwrite(blend_filepath, blend)
+
+
+if __name__ == '__main__':
+    
+    image_dir = '/home/marine/Workspace/cityscapes/leftImg8bit_demoVideo/leftImg8bit/demoVideo/stuttgart_00'
+    visualization_dir = '/home/marine/Workspace/stuttgart_00/VisualizedSemanticSegmentation'
+    blend_dir = '/home/marine/Workspace/stuttgart_00/Blend'
+
+    blend_image_labels(image_dir=image_dir, visualization_dir=visualization_dir, blend_dir=blend_dir)
