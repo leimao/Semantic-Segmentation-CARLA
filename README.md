@@ -11,7 +11,7 @@ This is the instruction on how to collect semantic segmentation synthetic datase
 
 ### Dependencies
 
-* Python 3.5/3.5 (CARLA 0.8.2 does not support Python 3.7/3.8)
+* Python 3.5/3.6 (CARLA 0.8.2 does not support Python 3.7/3.8)
 
 ### Download CARLA
 
