@@ -9,9 +9,11 @@ University of Chicago
 
 This is the instruction on how to collect semantic segmentation synthetic dataset using [CARLA 0.8.2](https://github.com/carla-simulator/carla/releases/tag/0.8.2).
 
-### Dependencies
+## Dependencies
 
 * Python 3.5/3.6 (CARLA 0.8.2 does not support Python 3.7/3.8)
+
+## Usages
 
 ### Download CARLA
 
